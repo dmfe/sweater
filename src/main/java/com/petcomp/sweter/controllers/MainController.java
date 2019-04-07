@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,37 +19,35 @@ public class MainController {
     private final MessagesRepository messagesRepository;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting() {
         return "greeting";
     }
 
     @GetMapping("/main")
-    public String root(Map<String, Object> model) {
-        model.put("messages", messagesRepository.findAll());
+    public String root(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+        model.addAttribute("messages", filterMessages(filter));
+        model.addAttribute("filter", filter);
+
         return "root";
     }
 
     @PostMapping("/main")
     public String addMessage(
             @AuthenticationPrincipal User user,
+            @RequestParam(required = false, defaultValue = "") String filter,
             @RequestParam String text,
             @RequestParam String tag,
-            Map<String, Object> model) {
+            Model model) {
 
         messagesRepository.save(new Message(text, tag, user));
 
-        model.put("messages", messagesRepository.findAll());
+        model.addAttribute("messages", filterMessages(filter));
+        model.addAttribute("filter", filter);
 
         return "root";
     }
 
-    @PostMapping("filter")
-    public String filterMessages(@RequestParam String filter, Map<String, Object> model) {
-        Iterable<Message> messages = StringUtils.isEmpty(filter) ? messagesRepository.findAll() :
-                messagesRepository.findByTag(filter);
-
-        model.put("messages", messages);
-
-        return "root";
+    private Iterable<Message> filterMessages(String filter) {
+        return  StringUtils.isEmpty(filter) ? messagesRepository.findAll() : messagesRepository.findByTag(filter);
     }
 }

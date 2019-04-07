@@ -5,6 +5,7 @@ import com.petcomp.sweter.domain.User;
 import com.petcomp.sweter.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,14 +19,15 @@ public class RegistrationController {
     private final UserRepository userRepository;
 
     @GetMapping("/registration")
-    public String registration() {
+    public String registration(Model model) {
+        model.addAttribute("message", "");
         return "registration";
     }
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
 
-        User persistedUser = userRepository.findByUserName(user.getUsername());
+        User persistedUser = userRepository.findByUsername(user.getUsername());
 
         if (persistedUser != null) {
             model.put("message", "User already exists.");
