@@ -25,7 +25,7 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
 
-        User persistedUser = userRepository.findByUserName(user.getUserName());
+        User persistedUser = userRepository.findByUserName(user.getUsername());
 
         if (persistedUser != null) {
             model.put("message", "User already exists.");

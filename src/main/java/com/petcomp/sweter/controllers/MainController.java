@@ -1,9 +1,11 @@
 package com.petcomp.sweter.controllers;
 
 import com.petcomp.sweter.domain.Message;
+import com.petcomp.sweter.domain.User;
 import com.petcomp.sweter.repositories.MessagesRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +31,13 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String addMessage(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        messagesRepository.save(new Message(text, tag));
+    public String addMessage(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag,
+            Map<String, Object> model) {
+
+        messagesRepository.save(new Message(text, tag, user));
 
         model.put("messages", messagesRepository.findAll());
 
