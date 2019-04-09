@@ -19,18 +19,17 @@ public class RegistrationController {
     private final UserRepository userRepository;
 
     @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("message", "");
+    public String registration() {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model) {
+    public String addUser(User user, Model model) {
 
         User persistedUser = userRepository.findByUsername(user.getUsername());
 
         if (persistedUser != null) {
-            model.put("message", "User already exists.");
+            model.addAttribute("message", "User already exists.");
             return "registration";
         }
 

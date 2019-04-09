@@ -17,3 +17,6 @@ spring:
 
   freemarker:
     expose-request-attributes: true
+
+upload:
+  path: "${user.dir}/uploads"
