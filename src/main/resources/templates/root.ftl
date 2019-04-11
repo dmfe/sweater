@@ -4,38 +4,56 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
-                <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Search by tag"/>
+                <input type="text" name="filter" class="form-control" value="${filter?ifExists}"
+                       placeholder="Search by tag"/>
                 <button class="btn btn-primary ml-2" type="submit">Search</button>
             </form>
         </div>
     </div>
 
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseAddMessage" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseAddMessage" role="button" aria-expanded="false"
+       aria-controls="collapseExample">
         Add new message
     </a>
     <div class="collapse" id="collapseAddMessage">
-        <form method="post" enctype="multipart/form-data">
-            <input type="text" name="text" placeholder="Input message">
-            <input type="text" name="tag" placeholder="Tag">
-            <input type="file" name="file">
-            <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            <button type="submit">Post</button>
-        </form>
+        <div class="form-group mt-3">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="text" placeholder="Input message">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="tag" placeholder="Tag">
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="file" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Post</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <#list messages as message>
-        <div>
-            <b>${message.id}</b>
-            <span>${message.text}</span>
-            <i>${message.tag}</i>
-            <strong>${message.authorName}</strong>
-            <div>
+    <div class="card-columns">
+        <#list messages as message>
+            <div class="card my-3">
                 <#if message.filename??>
-                    <img src="/img/${message.filename}">
+                    <img src="/img/${message.filename}" class="card-img-top">
                 </#if>
+                <div class="m-2">
+                    <span>${message.text}</span>
+                    <i>${message.tag}</i>
+                </div>
+                <div class="card-footer text-muted">
+                    ${message.authorName}
+                </div>
             </div>
-        </div>
-    <#else>
-        No messages
-    </#list>
+        <#else>
+            No messages
+        </#list>
+    </div>
 </@c.page>
