@@ -2,7 +2,5 @@
 <#import "parts/auth.ftl" as a>
 
 <@c.page>
-    Login page
-    <@a.auth "/login" />
-    <a href="/registration">Add new user</a>
+    <@a.auth "/login" false />
 </@c.page>

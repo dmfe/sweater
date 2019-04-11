@@ -2,7 +2,7 @@
 <#import "parts/auth.ftl" as a>
 
 <@c.page>
-    Add new user
+    <div class="mb-1">Add new user</div>
     ${message?ifExists}
-    <@a.auth "/registration" />
+    <@a.auth "/registration" true />
 </@c.page>

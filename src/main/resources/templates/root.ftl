@@ -1,12 +1,19 @@
 <#import "parts/common.ftl" as c>
-<#import "parts/auth.ftl" as a>
 
 <@c.page>
-    <div>
-        <@a.logout />
-        <span><a href="/users">Users list</a></span>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <form method="get" action="/main" class="form-inline">
+                <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Search by tag"/>
+                <button class="btn btn-primary ml-2" type="submit">Search</button>
+            </form>
+        </div>
     </div>
-    <div>
+
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseAddMessage" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Add new message
+    </a>
+    <div class="collapse" id="collapseAddMessage">
         <form method="post" enctype="multipart/form-data">
             <input type="text" name="text" placeholder="Input message">
             <input type="text" name="tag" placeholder="Tag">
@@ -15,11 +22,6 @@
             <button type="submit">Post</button>
         </form>
     </div>
-    <div>Messages List</div>
-    <form method="get" action="/main">
-        <input type="text" name="filter" value="${filter?ifExists}"/>
-        <button type="submit">Find</button>
-    </form>
 
     <#list messages as message>
         <div>
