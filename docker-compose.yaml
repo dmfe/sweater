@@ -1,0 +1,21 @@
+version: "2"
+services:
+    postgres:
+        restart: always
+        image: postgres:12.2
+        container_name: sweater_postgres
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_DB=sweater
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+
+    sweater:
+        restart: always
+        image: dmfe/sweater
+        container_name: sweater
+        ports:
+            - 8080:8080
+        depends_on:
+            - postgres
